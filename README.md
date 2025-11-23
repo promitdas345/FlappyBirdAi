@@ -16,6 +16,13 @@ AI learns to play Flappy Bird using NEAT (NeuroEvolution of Augmenting Topologie
 
 3. Open the printed link (http://127.0.0.1:8000/)
 
+## Install Python (if missing)
+- **Windows (PowerShell)**: `winget install -e --id Python.Python.3.12`
+- **macOS (Homebrew)**: `brew install python`
+- **Linux (Debian/Ubuntu)**: `sudo apt update && sudo apt install -y python3 python3-venv`
+
+Python 3 is only used for the built-in `http.server`; no extra pip packages are required.
+
 ## Controls
 
 | Key | Action |

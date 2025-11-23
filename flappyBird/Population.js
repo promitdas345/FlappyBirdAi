@@ -27,13 +27,15 @@ class Population {
   }
 
   getCurrentBest() {
-
+    var bestAlive = null;
     for (var i = 0; i < this.players.length; i++) {
       if (!this.players[i].dead) {
-        return this.players[i];
+        if (bestAlive == null || this.players[i].score > bestAlive.score) {
+          bestAlive = this.players[i];
+        }
       }
     }
-    return this.players[0];
+    return bestAlive || this.players[0];
   }
   updateAlive() {
       var firstShown = false;
@@ -268,6 +270,9 @@ class Population {
 
     this.players = [];
     arrayCopy(children, this.players); //set the children as the current this.playersulation
+    if (typeof randomPipeHeights !== 'undefined') {
+      randomPipeHeights = []; // reset saved pipe heights each generation to avoid unbounded growth
+    }
     this.gen += 1;
     for (var i = 0; i < this.players.length; i++) { //generate networks for each of the children
       this.players[i].brain.generateNetwork();
@@ -295,9 +300,9 @@ class Population {
       }
     }
     //------------------------------------------------------------------------------------------------------------------------------------------
-    //calculates the fitness of all of the players
+  //calculates the fitness of all of the players
   calculateFitness() {
-      for (var i = 1; i < this.players.length; i++) {
+      for (var i = 0; i < this.players.length; i++) {
         this.players[i].calculateFitness();
       }
     }

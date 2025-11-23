@@ -9,12 +9,12 @@ AI learns to play Flappy Bird using NEAT (NeuroEvolution of Augmenting Topologie
    cd Flappy-Bird-AI/flappyBird
    ```
 
-2. Start a local server:
+2. Start a local server (prints the URL in the terminal):
    ```bash
-   python -m http.server 8000
+   python -m http.server 8000 --bind 127.0.0.1
    ```
 
-3. Open browser to `http://localhost:8000`
+3. Open the printed link (http://127.0.0.1:8000/)
 
 ## Controls
 

@@ -33,6 +33,7 @@ var showNothing = false;
 
 var randomPipeHeights = [];
 var isChristmas = true;
+var continueFromSaved = true; // Set to false to train from scratch
 
 function preload() {
   if (isChristmas) {
@@ -61,8 +62,17 @@ function setup() {
   population = new Population(1000);
   
   // Try to load saved AI
-  if (population.loadBestPlayer()) {
+  if (continueFromSaved && population.loadBestPlayer()) {
     console.log("Previous AI training loaded!");
+    // Seed the population with the best AI
+    for (var i = 0; i < population.players.length; i++) {
+      population.players[i].brain = population.bestPlayer.brain.clone();
+      population.players[i].brain.mutate(population.innovationHistory);
+      population.players[i].brain.generateNetwork();
+    }
+    console.log("Population seeded with best AI + mutations");
+  } else {
+    console.log("Training from scratch");
   }
   
   humanPlayer = new Player();
@@ -210,7 +220,7 @@ function writeInfo() {
   textSize(13);
   textAlign(RIGHT);
   var y = canvas.height - 15;
-  text("E: Export | I: Import | L: Save | D: Delete", canvas.width - 10, y);
+  text("E: Export | I: Import | L: Save | D: Delete | R: Toggle Mode", canvas.width - 10, y);
   y -= 18;
   text("B: Replay Best | G: Show Gens | P: Play Manual", canvas.width - 10, y);
   y -= 18;
@@ -218,6 +228,13 @@ function writeInfo() {
   y -= 18;
   fill(0, 255, 0);
   text("Speed: " + speed + " FPS", canvas.width - 10, y);
+  y -= 18;
+  if (continueFromSaved) {
+    fill(100, 255, 100);
+  } else {
+    fill(255, 100, 100);
+  }
+  text("Mode: " + (continueFromSaved ? "Continue from Saved" : "Train from Scratch"), canvas.width - 10, y);
 }
 
 function windowResized() {
@@ -279,6 +296,10 @@ function keyPressed() {
       break;
     case 'I': //import from file
       document.getElementById('fileInput').click();
+      break;
+    case 'R': //toggle continue from saved
+      continueFromSaved = !continueFromSaved;
+      console.log("Continue from saved: " + continueFromSaved + " (refresh to apply)");
       break;
   }
   //any of the arrow keys

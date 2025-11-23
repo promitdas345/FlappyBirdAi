@@ -11,9 +11,10 @@ class Player {
     this.deadOnGroundCount = 0;
     this.fallRotation = -PI / 6;
     this.pipeRandomNo = 0;
+    this.pipeSpacingFactor = 0.5; // slightly tighter horizontal spacing between pipe pairs
     this.pipes1 = new PipePair(true);
     this.pipes2 = new PipePair(false, this.pipes1, this.pipeRandomNo);
-    this.pipes2.setX(1.5 * canvas.width + this.pipes2.topPipe.width / 2);
+    this.pipes2.setX(this.pipeSpacingFactor * canvas.width + this.pipes2.topPipe.width / 2);
     this.pipeRandomNo++;
     this.ground = new Ground();
 
@@ -77,12 +78,15 @@ class Player {
     this.pipes2.update();
     this.ground.update();
     //if either pipe is off the screen then reset the pipe
+    const pipeSpacing = this.pipeSpacingFactor * canvas.width;
     if (this.pipes1.offScreen()) {
       this.pipes1 = new PipePair(false, this.pipes2, this.pipeRandomNo);
+      this.pipes1.setX(this.pipes2.topPipe.x + pipeSpacing);
       this.pipeRandomNo++;
     }
     if (this.pipes2.offScreen()) {
       this.pipes2 = new PipePair(false, this.pipes1, this.pipeRandomNo);
+      this.pipes2.setX(this.pipes1.topPipe.x + pipeSpacing);
       this.pipeRandomNo++;
     }
   }
